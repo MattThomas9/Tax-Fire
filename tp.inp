@@ -1,0 +1,105 @@
+[Code Control]
+Detailed Print:   no
+
+[General Tax Information]
+Tax Year:                      2019
+Number of Total Pay Periods:     26
+Number of Completed Pay Periods:  9
+Social Security Tax Rate (%):     6.20
+Medicare Tax Rate (%):            1.45
+
+[Federal Tax Information]
+Federal Filing Status:        single
+Federal Deduction Method:   standard
+Federal Standard Deduction: 12200.00
+Federal Exemption:              0.00
+
+[Prior Year Federal Tax Information]
+Prior Year Federal Standard Deduction: 12000.00
+
+[State Tax Information]
+Number of States Lived in:  4
+State Abbreviations:           md       tn       sc       ga
+State Deduction Method:  standard standard standard standard
+State Standard Deduction: 1500.00     0.00 12200.00  4600.00
+State Exemption:          3200.00     0.00     0.00  2700.00
+State Additions:          2400.00  1900.00  1500.00  2000.00
+State Subtractions:       2750.00  2750.00  2750.00     0.00
+
+[Income Information]
+Wages Salary Tips:          78000.00      0.00
+Taxable Interest:             100.00      0.00
+Total Ordinary Dividends:     150.00      0.00
+Qualified Dividends:          150.00      0.00
+Long Term Capital Gains:     2500.00      0.00
+Short Term Capital Gains:       0.00      0.00
+Long Term Capital Losses:       0.00      0.00
+Short Term Capital Losses:      0.00      0.00
+Other Income:                   0.00      0.00
+
+[Adjustments to Income]
+HSA Deduction:            2600.00      0.00
+Other Adjustments:           0.00      0.00
+
+[State Tax Refunds from Previous Year (1099-G)]
+Previous State Tax Refunds:            0.00
+Previous Total Itemized Deduction:     0.00
+
+[Itemized Deduction Information]
+Medical and Dental:                    0.00
+Real Estate and Personal Property:     0.00
+Other Tax Expenses:                    0.00
+Home Mortgage Interest and Points:     0.00
+Investment Interest:                   0.00
+Gifts:                                 0.00
+Casualty and Theft Losses:             0.00
+Other Itemized Deductions:             0.00
+
+[Tax Brackets, Rates, Etc.]
+
+# Long Term Capital Gains Rates
+Number of LTCG Brackets: 3
+LTCG Brackets and Rates: 0.00  39375.00  0.00
+                     39375.00 434550.00 15.00
+                    434550.00       inf 20.00
+
+# Federal Income Tax Brackets
+Number of Federal Tax Brackets: 7
+Federal Tax Brackets and Rates: 0.00   9700.00 10.00
+                             9700.00  39475.00 12.00
+                            39475.00  84200.00 22.00
+                            84200.00 160725.00 24.00
+                           160725.00 204100.00 32.00
+                           204100.00 510300.00 35.00
+                           510300.00       inf 37.00
+
+# State Income Tax Brackets (put in same order as state abbreviations)
+# state 2 brackets below state 1 brackets, state 3 below state 2, etc.
+Number of State Tax Brackets: 8 1 6 6
+State Tax Brackets and Rates: 0.00   1000.00  2.00
+                           1000.00   2000.00  3.00
+                           2000.00   3000.00  4.00
+                           3000.00 100000.00  4.75
+                         100000.00 125000.00  5.00
+                         125000.00 150000.00  5.25
+                         150000.00 250000.00  5.50
+                         250000.00       inf  5.75
+                              0.00       inf  0.00
+                              0.00   2970.00  0.00
+                           2970.00   5940.00  3.00
+                           5940.00   8910.00  4.00
+                           8910.00  11888.00  5.00
+                          11888.00  14860.00  6.00
+                          14860.00       inf  7.00
+                              0.00    750.00  1.00
+                            750.00   2250.00  2.00
+                           2250.00   3750.00  3.00
+                           3750.00   5250.00  4.00
+                           5250.00   7000.00  5.00
+                           7000.00       inf  5.75
+
+# Local Income Tax Rates (put in same order as state abbreviations)
+# probably will only ever have 1 local per state.
+# number of local tax rates go in side by side, and tax rates themselves go in side by side too
+Number of Local Tax Rates: 1 0 0 0
+Local Tax Rates (%): 3.20
