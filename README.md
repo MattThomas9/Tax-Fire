@@ -210,7 +210,82 @@ See Appendix A for an example of an entire functioning `tp.inp` file with import
 
 ### Federal and State Wages and Withholding Input
 
+`fedwages.inp` is the file you use to input your federal wages. This file is read by `tpmain.py` in the same way
+`tpmain.py` reads `tp.inp`, that is, with the `configparser` class. Therefore, proper formatting of this file is required
+and in-line comments are not to be used. Each line corresponds to the pay period, your wages, then spouse's wages.
 
+An example of `fedwages.inp` formatting is below:
+```
+[Federal Wage Information]
+Federal Wages: 1        3000.00        0.00
+               2        2900.00        0.00
+               3        3100.00        0.00
+               4        2800.00        0.00
+               5        2950.00        0.00
+```
+`fedwages.inp` shall contain a Section defined as `[Federal Wage Information]`. 
+
+`fedwages.inp` should also contain an input line defined as `Federal Wages:` and from there the user should input 
+the federal wage information in the defined format as seen above.
+
+**NOTES:**
+
+**1. The sum of `Federal Wages` found in `fedwages.inp` should ultimately equal the value provided in `tp.inp` under the `[Income Information]` section for `Wages Salary Tips:`. If these values do not equal one another, the user will see a warning appear in the output printed to screen.**
+
+**2. Currently, because this is a tax calculator/planner program, the wages that are inputted into this program via `fedwages.inp` and `tp.inp` are wages that SHOULD NOT include pre-tax benefits. In other words, the wages that are inputted into this program should be gross pay less pre-tax benefits (e.g. pre-tax health insurance benefits, traditional 401k/TSP contributions, etc.). If you put in wages that include your pre-tax benefits (i.e. gross pay alone) the program will calculate tax on income that shouldn't be taxed and thus overestimate your taxes.**
+
+If you are filing single, put in `0.00` as your spouse's wages, which is inputted right beside your wages, as seen in the format
+for `fedwages.inp` above. The same input format is used for your state wage input as well.
+
+In `tp.inp`, you will have inputted each state's abbreviated name for which you are planning taxes. So for example,
+`tp.inp` might have something like:
+```
+Number of States Lived in:  3
+State Abbreviations:           md       tn       ga
+```
+which means you also need `3` corresponding state wages files. The state wages files must also be preceded by the same
+abbreviation you input into `tp.inp`. So considering the 3-state filing example above, the user will need to have:
+```
+mdwages.inp
+tnwages.inp
+gawages.inp
+```
+Each `'state'wages.inp` file is in the same format as `fedwages.inp`. An example of `'state'wages.inp` format is below:
+```
+[State Wage Information]
+State Wages: 1        3000.00        0.00
+             2        2900.00        0.00
+             3        3100.00        0.00
+             4        2800.00        0.00
+             5        2950.00        0.00
+```
+Same goes for `fedwithholding.inp` and your `'state'withholding.inp` files. Following the 3-state filing example above,
+all of your withholding files will be named:
+```
+fedwithholding.inp
+mdwithholding.inp
+tnwithholding.inp
+gawithholding.inp
+```
+An example of `fedwithholding.inp` format is provided below:
+```
+[Federal Withholding Information]
+Federal Withholding: 1          540.62            0.0
+                     2          1025.4            0.0
+                     3          642.96            0.0
+```
+For `'state'withholding.inp`, it would look like this:
+```
+[State Withholding Information]
+State Withholding: 1          273.31            0.0
+                   2          458.84            0.0
+                   3          111.95            0.0
+```
+**NOTES:**
+
+**1. Inside each `'state'wages.inp` and `'state'withholding.inp file`, there is no specific designation within these files that indicates which state the information is for. The only designation for which state the wage and withholding information is for is contained only in the file name itself.**
+
+**2. In the Federal and State wage and withholding input file examples above, each line corresponds to the pay-period's wage or withholding. Therefore, if in `tp.inp` you have `Number of Total Pay Periods:  26`, you ought to have `26` line items worth of wage/withholding information in each respective file.**
 
 ### Input Summary
 
