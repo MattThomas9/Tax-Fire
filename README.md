@@ -289,7 +289,16 @@ State Withholding: 1          273.31            0.0
 
 ### Input Summary
 
+In summary, to run the Tax-Fire code, you need the following input files appropriately filled out:
+```
+1. tp.inp
+2. fedwages.inp
+3. fedwithholding.inp
+4. 'state abbreviation'wages.inp, where 'state abbreviation' = the abbreviation you use in tp.inp
+5. 'state abbreviation'withholding.inp, where 'state abbreviation' = the abbreviation you use in tp.inp
+```
 
+See [Setup](#setup) for information regarding where all these input files need to be located prior to running the code.
 
 ## Code Description
 
