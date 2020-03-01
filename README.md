@@ -134,6 +134,25 @@ If only lived in one state, then just put in one state's worth of information.
 
 In the `[Income Information]` and `[Adjustments to Income]` sections, put self and spouse's information in side-by-side.
 
+The value inputted for `Wages Salary Tips:` should be equal to Box 1 of your W2. Furthermore, it should also equal the sum of
+`Federal Wages` found in `fedwages.inp`. If these values do not equal one another, the user will see a warning appear in the
+output printed to screen.
+
+The value inputted for `HSA Deduction:` shall be derived from IRS Form 8889. Employer contributions on your behalf to an HSA
+(that is, payroll deductions that are pre-tax that go straight into your HSA) that are under the IRS limit for the year are not
+included as part of the value in Box 1 of your W2. Instead, they are shown in Box 12 with Code W. Because these HSA contributions
+are not included in Box 1 of your W2, they shall also not be included in the `Wages Salary Tips:` input line.
+Therefore, by not including them in `Wages Salary Tips:`, they shall not be included in `HSA Deduction:` or else
+you will have double counted them as an adjustment to your income.
+
+The purpose of this input, `HSA Deduction:`, is to solely reflect the value determined from IRS Form 8889. For example, in 2019, I had
+$2600 deducted from my payroll, pre-tax, that went straight into my HSA. The value in Box 1 of my W2 did not include the $2600 (the
+$2600 instead was shown in Box 12 with Code W; therefore, making this $2600 excluded from my income tax calculation. Because Box 1 of my
+W2 already did not include the $2600, my `Wages Salary Tips:` input (and the sum of my `Federal Wages` found in `fedwages.inp`) also did
+not include the $2600. Because the $2600 was not included in `Wages Salary Tips:` and also not included in the sum of my `Federal Wages`
+found in `fedwages.inp`, I did NOT input $2600 into `HSA Deduction:`. Instead, I just inputted 0.00 into `HSA Deduction:`. Furthermore,
+by following IRS Form 8889 for 2019, the value it told me to put for my HSA Deduction was also 0.00.
+
 In the `[State Tax Refunds from Previous Year (1099-G)]` section of `tp.inp`, this information must be put in to determine
 if any prior year state tax refunds are taxable in the current year. So you are inputting your prior year information here.
 
