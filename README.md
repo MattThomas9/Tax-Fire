@@ -17,6 +17,19 @@ For easy running and development, download a python IDE. I like using PyCharm.
 
 * [PyCharm](https://www.jetbrains.com/pycharm/)
 
+Open PyCharm, and on the Welcome to PyCharm screen, click **Get from Version Control**.
+
+Clone the Tax-Fire repository into your local PyCharm Projects directory.
+
+Once cloned into your local directory, you may need to add a Python Interpreter to your local Tax-Fire Project.
+Tax-Fire was written in Python 3.7.
+
+`File > Settings > Project: Tax-Fire > Project Interpreter > Gear Icon > Add`
+
+Ensure the `Project Interpreter:` box is populated with the appropriate python.exe file.
+
+This will then create the `venv` folder with necessary Python files.
+
 ## Setup
 
 `tpmain.py` and its functions shall be located in the "main directory" from which code runs will be executed.
@@ -61,8 +74,13 @@ would be:
 
 Lastly, `tp.inp` itself shall be located in the main directory, or in this case, `tax_planner\`.
 
-If using PyCharm IDE, and with the directories and case folders setup in this way, the user simply pushes the green
-play button to run the case.
+If using PyCharm, once the files and Case Folder are set up appropriately, and after the virtual environment and the
+Python Interpreter (see [Prerequisites](#prerequisites)) have been appropriately added, in order to run, the user should:
+
+`right click tpmain.py > Run 'tpmain'` 
+
+(this will add a `tpmain` configuration to the top tool bar where the user can simply click the green "play" button
+to continue running his/her case).
 
 ## Input
 
