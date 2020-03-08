@@ -26,11 +26,14 @@ ntaxyear = config.getint('General Tax Information', 'Tax Year')
 numpayps = config.getint('General Tax Information', 'Number of Total Pay Periods')
 ipayperd = config.getint('General Tax Information', 'Number of Completed Pay Periods')
 txrtoasd = config.getfloat('General Tax Information', 'Social Security Tax Rate (%)') / 100.0
+oasdlimt = config.getfloat('General Tax Information', 'Social Security Tax Limit')
+sstxwhld = config.getfloat('General Tax Information', 'Social Security Tax Withheld')
 txrtmedi = config.getfloat('General Tax Information', 'Medicare Tax Rate (%)') / 100.0
 ifilstat = config.get('Federal Tax Information', 'Federal Filing Status')
 ifeddedm = config.get('Federal Tax Information', 'Federal Deduction Method')
 fedstndd = config.getfloat('Federal Tax Information', 'Federal Standard Deduction')
 fedexmat = config.getfloat('Federal Tax Information', 'Federal Exemption')
+totothtx = config.getfloat('Additional Taxes', 'Total Other Taxes')
 prefedsd = config.getfloat('Prior Year Federal Tax Information', 'Prior Year Federal Standard Deduction')
 numstate = config.getint('State Tax Information', 'Number of States Lived in')
 istateab = config.get('State Tax Information', 'State Abbreviations').split()
@@ -200,7 +203,8 @@ for i in range(0, numstate):
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------- Social Security and Medicare Taxable Income Calculation ------------------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
-ssmctaxinc = sum(wgsaltip) - sum(hsadedct)
+socstaxinc = min((sum(wgsaltip) - sum(hsadedct)), oasdlimt)
+medctaxinc = sum(wgsaltip) - sum(hsadedct)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------- Federal Tax Calculation ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -212,7 +216,7 @@ for i in range(0, nfdtxbrk):
 qdcgrslt = qdcgtax(fedtaxinc, sum(qualdivd), capnet, capltnet, brkltcgr, brkfedtx, nfdtxbrk)
 fedinclessqdcgtax = qdcgrslt[0]
 qdltcgtax = qdcgrslt[1]
-fedtax = qdcgrslt[2]
+fedtax = qdcgrslt[2] + totothtx
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------------------------- State Tax Calculation ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -233,8 +237,8 @@ for i in range(0, numstate):
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------------------- SS and Medicare Tax Calculation ------------------------------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
-socsectax = ssmctaxinc * txrtoasd
-medcartax = ssmctaxinc * txrtmedi
+socsectax = socstaxinc * txrtoasd
+medcartax = medctaxinc * txrtmedi
 # -------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------ Effective Tax Rate Calculation ------------------------------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -256,6 +260,10 @@ refunfed = refund(ytdfdwhl, fedtax)
 refunsta = []
 for i in range(0, numstate):
     refunsta.append(refund(ytdstwhl[i], statetax[i]))
+# -------------------------------------------------------------------------------------------------------------------- #
+# ---------------------------------------- Social Security Refund Calculation ---------------------------------------- #
+# -------------------------------------------------------------------------------------------------------------------- #
+refunssc = refund(sstxwhld, socsectax)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------- Zero Out Federal Refund ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -373,8 +381,8 @@ for i in range(0, numstate):
 print('')
 print('{:>20s}'.format('Tot. Taxable Income|'), end='')
 print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedtaxinc, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', ssmctaxinc, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', ssmctaxinc, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', socstaxinc, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', medctaxinc, '|'), end='')
 for i in range(0, numstate):
     print('{:>2s}{:>11.2f}{:>4s}'.format('$', stataxinc[i], '|'), end='')
 print('')
@@ -408,14 +416,14 @@ for i in range(0, numstate):
 print('')
 print('{:>20s}'.format('   Taxes Withheld  |'), end='')
 print('{:>3s}{:>11.2f}{:>4s}'.format('$', ytdfdwhl, '|'), end='')
-print('{:>17s}'.format(' '), end='|')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', sstxwhld, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 for i in range(0, numstate):
     print('{:>2s}{:>11.2f}{:>4s}'.format('$', ytdstwhl[i], '|'), end='')
 print('')
 print('{:>20s}'.format('      Refunds      |'), end='')
 print('{:>3s}{:>11.2f}{:>4s}'.format('$', refunfed, '|'), end='')
-print('{:>17s}'.format(' '), end='|')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', refunssc, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 for i in range(0, numstate):
     print('{:>2s}{:>11.2f}{:>4s}'.format('$', refunsta[i], '|'), end='')
