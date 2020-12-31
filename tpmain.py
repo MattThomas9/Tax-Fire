@@ -42,6 +42,8 @@ stastndd = [float(i) for i in config.get('State Tax Information', 'State Standar
 staexmat = [float(i) for i in config.get('State Tax Information', 'State Exemption').split()]
 stateadd = [float(i) for i in config.get('State Tax Information', 'State Additions').split()]
 statesub = [float(i) for i in config.get('State Tax Information', 'State Subtractions').split()]
+istdnfmd = config.get('State Tax Information', 'Do Not File Method').split()
+stdnflim = [float(i) for i in config.get('State Tax Information', 'Do Not File Limit').split()]
 wgsaltip = [float(i) for i in config.get('Income Information', 'Wages Salary Tips').split()]
 taxabint = [float(i) for i in config.get('Income Information', 'Taxable Interest').split()]
 totordiv = [float(i) for i in config.get('Income Information', 'Total Ordinary Dividends').split()]
@@ -193,13 +195,22 @@ else:
 # ----------------------------------------- State Taxable Income Calculation ----------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
 stataxinc = []
+istfiling = []
 for i in range(0, numstate):
-    if istadedm[i].lower() == 'standard':
-        stataxinc.append(round(stateagi[i] - stastndd[i] - staexmat[i], 2))
-    elif istadedm[i].lower() == 'itemized':
-        stataxinc.append(round(stateagi[i] - staitmded[i] - staexmat[i], 2))
+    if istdnfmd[i].lower() == 'stateagi':
+        if stateagi[i] < stdnflim[i]:
+            stataxinc.append(0.0)
+            istfiling.append(True)
+        else:
+            if istadedm[i].lower() == 'standard':
+                stataxinc.append(round(stateagi[i] - stastndd[i] - staexmat[i], 2))
+            elif istadedm[i].lower() == 'itemized':
+                stataxinc.append(round(stateagi[i] - staitmded[i] - staexmat[i], 2))
+            else:
+                print('STOP!!! Error in your "State Deduction Method" input')
+            istfiling.append(False)
     else:
-        print('STOP!!! Error in your "State Deduction Method" input')
+        print('STOP!!! Error in your "Do Not File Method" input')
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------- Social Security and Medicare Taxable Income Calculation ------------------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -378,6 +389,13 @@ print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
 for i in range(0, numstate):
     print('{:>2s}{:>11.2f}{:>4s}'.format('$', staexmat[i], '|'), end='')
+print('')
+print('{:>20s}'.format('Do Not File?    |'), end='')
+print('{:>17s}'.format(' '), end='|')
+print('{:>17s}'.format(' '), end='|')
+print('{:>17s}'.format(' '), end='|')
+for i in range(0, numstate):
+    print('{:>10s}{:>6s}'.format(str(istfiling[i]), ' '), end='|')
 print('')
 print('{:>20s}'.format('Tot. Taxable Income|'), end='')
 print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedtaxinc, '|'), end='')
