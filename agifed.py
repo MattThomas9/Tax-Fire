@@ -17,7 +17,7 @@ def agifed(netcapital, wagsaltip, taxblint, totordnrydiv, taxblstateref, otherin
                   - sum(otheradjmt)
                   )
     # the following code is here for a placeholder right now
-    # if (capltnet > 0.0) and (capnet > 0.0)
+    # if (net_long_term_capital > 0.0) and (net_capital > 0.0)
     # 28% Rate Gain Calculation will go here
     # Unrecaptured Section 1250 Gain Calculation will go here
     elif netcapital < 0.0:

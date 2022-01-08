@@ -11,5 +11,5 @@ def optrefund(wthld, refun, numpp, ipp):
     if ipp < numpp:
         wthldadj = refun / (numpp - ipp)
         for i in range(ipp, numpp):
-            wthldnew[i][1] = round(wthld[i][1] - wthldadj, 2)
+            wthldnew[i*3+1] = round(float(wthld[i*3+1]) - wthldadj, 2)
     return wthldnew

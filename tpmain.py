@@ -21,96 +21,100 @@ from optrefund import optrefund
 # -------------------------------------------------------------------------------------------------------------------- #
 config = configparser.ConfigParser()
 config.read('tp.inp')
-idetprnt = config.get('Code Control', 'Detailed Print')
-ntaxyear = config.getint('General Tax Information', 'Tax Year')
-numpayps = config.getint('General Tax Information', 'Number of Total Pay Periods')
-ipayperd = config.getint('General Tax Information', 'Number of Completed Pay Periods')
-txrtoasd = config.getfloat('General Tax Information', 'Social Security Tax Rate (%)') / 100.0
-oasdlimt = config.getfloat('General Tax Information', 'Social Security Tax Limit')
-sstxwhld = config.getfloat('General Tax Information', 'Social Security Tax Withheld')
-txrtmedi = config.getfloat('General Tax Information', 'Medicare Tax Rate (%)') / 100.0
-ifilstat = config.get('Federal Tax Information', 'Federal Filing Status')
-ifeddedm = config.get('Federal Tax Information', 'Federal Deduction Method')
-fedstndd = config.getfloat('Federal Tax Information', 'Federal Standard Deduction')
-fedexmat = config.getfloat('Federal Tax Information', 'Federal Exemption')
-totothtx = config.getfloat('Additional Taxes', 'Total Other Taxes')
-prefedsd = config.getfloat('Prior Year Federal Tax Information', 'Prior Year Federal Standard Deduction')
-numstate = config.getint('State Tax Information', 'Number of States Lived in')
-istateab = config.get('State Tax Information', 'State Abbreviations').split()
-istadedm = config.get('State Tax Information', 'State Deduction Method').split()
-stastndd = [float(i) for i in config.get('State Tax Information', 'State Standard Deduction').split()]
-staexmat = [float(i) for i in config.get('State Tax Information', 'State Exemption').split()]
-stateadd = [float(i) for i in config.get('State Tax Information', 'State Additions').split()]
-statesub = [float(i) for i in config.get('State Tax Information', 'State Subtractions').split()]
-istdnfmd = config.get('State Tax Information', 'Do Not File Method').split()
-stdnflim = [float(i) for i in config.get('State Tax Information', 'Do Not File Limit').split()]
-wgsaltip = [float(i) for i in config.get('Income Information', 'Wages Salary Tips').split()]
-taxabint = [float(i) for i in config.get('Income Information', 'Taxable Interest').split()]
-totordiv = [float(i) for i in config.get('Income Information', 'Total Ordinary Dividends').split()]
-qualdivd = [float(i) for i in config.get('Income Information', 'Qualified Dividends').split()]
-cpgainlt = [float(i) for i in config.get('Income Information', 'Long Term Capital Gains').split()]
-cpgainst = [float(i) for i in config.get('Income Information', 'Short Term Capital Gains').split()]
-cplosslt = [float(i) for i in config.get('Income Information', 'Long Term Capital Losses').split()]
-cplossst = [float(i) for i in config.get('Income Information', 'Short Term Capital Losses').split()]
-otherinc = [float(i) for i in config.get('Income Information', 'Other Income').split()]
-hsadedct = [float(i) for i in config.get('Adjustments to Income', 'HSA Deduction').split()]
-otheradj = [float(i) for i in config.get('Adjustments to Income', 'Other Adjustments').split()]
-prestref = config.getfloat('State Tax Refunds from Previous Year (1099-G)', 'Previous State Tax Refunds')
-preitded = config.getfloat('State Tax Refunds from Previous Year (1099-G)', 'Previous Total Itemized Deduction')
-expnsmed = config.getfloat('Itemized Deduction Information', 'Medical and Dental')
-expnsrel = config.getfloat('Itemized Deduction Information', 'Real Estate and Personal Property')
-expnstxo = config.getfloat('Itemized Deduction Information', 'Other Tax Expenses')
-expnsmor = config.getfloat('Itemized Deduction Information', 'Home Mortgage Interest and Points')
-expnsinv = config.getfloat('Itemized Deduction Information', 'Investment Interest')
-expnsgif = config.getfloat('Itemized Deduction Information', 'Gifts')
-expnscas = config.getfloat('Itemized Deduction Information', 'Casualty and Theft Losses')
-expnsoth = config.getfloat('Itemized Deduction Information', 'Other Itemized Deductions')
-nltcgbrk = config.getint('Tax Brackets, Rates, Etc.', 'Number of LTCG Brackets')
-brkltcgr = [[float(i) for i in config.get('Tax Brackets, Rates, Etc.', 'LTCG Brackets and Rates').split()]
-            [j:j+3] for j in range(0, 3 * nltcgbrk, 3)]
-nfdtxbrk = config.getint('Tax Brackets, Rates, Etc.', 'Number of Federal Tax Brackets')
-brkfedtx = [[float(i) for i in config.get('Tax Brackets, Rates, Etc.', 'Federal Tax Brackets and Rates').split()]
-            [j:j+3] for j in range(0, 3 * nfdtxbrk, 3)]
-nsttxbrk = [int(i) for i in config.get('Tax Brackets, Rates, Etc.', 'Number of State Tax Brackets').split()]
-brkstatx = [[[float(i) for i in config.get('Tax Brackets, Rates, Etc.', 'State Tax Brackets and Rates').split()]
-             [j:j+3] for j in range(0, 3 * sum(nsttxbrk), 3)]
-            [sum(nsttxbrk[0:k+1])-nsttxbrk[k]:sum(nsttxbrk[0:k+1])] for k in range(0, numstate)]
-nloctaxr = [int(i) for i in config.get('Tax Brackets, Rates, Etc.', 'Number of Local Tax Rates').split()]
-taxrlocl = [[float(i) for i in config.get('Tax Brackets, Rates, Etc.', 'Local Tax Rates (%)').split()]
-            [sum(nloctaxr[0:j+1])-nloctaxr[j]:sum(nloctaxr[0:j+1])] for j in range(0, numstate)]
-icase = "cases/" + str(ntaxyear) + "/"
+detailed_print = config.get('Code Control', 'Detailed Print')
+tax_year = config.getint('General Tax Information', 'Tax Year')
+pay_periods = config.getint('General Tax Information', 'Number of Total Pay Periods')
+current_pay_period = config.getint('General Tax Information', 'Number of Completed Pay Periods')
+social_security_rate = config.getfloat('General Tax Information', 'Social Security Tax Rate (%)') / 100.0
+social_security_limit = config.getfloat('General Tax Information', 'Social Security Tax Limit')
+social_security_withheld = config.getfloat('General Tax Information', 'Social Security Tax Withheld')
+medicare_rate = config.getfloat('General Tax Information', 'Medicare Tax Rate (%)') / 100.0
+federal_filing_status = config.get('Federal Tax Information', 'Federal Filing Status')
+federal_deduction_method = config.get('Federal Tax Information', 'Federal Deduction Method')
+federal_standard_deduction = config.getfloat('Federal Tax Information', 'Federal Standard Deduction')
+federal_exemption = config.getfloat('Federal Tax Information', 'Federal Exemption')
+other_tax_total = config.getfloat('Additional Taxes', 'Total Other Taxes')
+prior_year_federal_standard_deduction = config.getfloat('Prior Year Federal Tax Information',
+                                                        'Prior Year Federal Standard Deduction')
+number_of_states = config.getint('State Tax Information', 'Number of States Lived in')
+state_abbreviations = config.get('State Tax Information', 'State Abbreviations').split()
+state_deduction_method = config.get('State Tax Information', 'State Deduction Method').split()
+state_standard_deduction = [float(i) for i in config.get('State Tax Information', 'State Standard Deduction').split()]
+state_exemption = [float(i) for i in config.get('State Tax Information', 'State Exemption').split()]
+state_additions = [float(i) for i in config.get('State Tax Information', 'State Additions').split()]
+state_subtractions = [float(i) for i in config.get('State Tax Information', 'State Subtractions').split()]
+do_not_file_for_state = config.get('State Tax Information', 'Do Not File Method').split()
+state_do_not_file_limit = [float(i) for i in config.get('State Tax Information', 'Do Not File Limit').split()]
+wages_salary_tips = [float(i) for i in config.get('Income Information', 'Wages Salary Tips').split()]
+taxable_interest = [float(i) for i in config.get('Income Information', 'Taxable Interest').split()]
+ordinary_dividends = [float(i) for i in config.get('Income Information', 'Total Ordinary Dividends').split()]
+qualified_dividends = [float(i) for i in config.get('Income Information', 'Qualified Dividends').split()]
+long_term_capital_gains = [float(i) for i in config.get('Income Information', 'Long Term Capital Gains').split()]
+short_term_capital_gains = [float(i) for i in config.get('Income Information', 'Short Term Capital Gains').split()]
+long_term_capital_loss = [float(i) for i in config.get('Income Information', 'Long Term Capital Losses').split()]
+short_term_capital_loss = [float(i) for i in config.get('Income Information', 'Short Term Capital Losses').split()]
+other_income = [float(i) for i in config.get('Income Information', 'Other Income').split()]
+hsa_deduction = [float(i) for i in config.get('Adjustments to Income', 'HSA Deduction').split()]
+other_adjustments = [float(i) for i in config.get('Adjustments to Income', 'Other Adjustments').split()]
+prior_year_state_refund = config.getfloat('State Tax Refunds from Previous Year (1099-G)', 'Previous State Tax Refunds')
+prior_year_itemized_deduction = config.getfloat('State Tax Refunds from Previous Year (1099-G)',
+                                                'Previous Total Itemized Deduction')
+medical_and_dental = config.getfloat('Itemized Deduction Information', 'Medical and Dental')
+real_estate_personal_property = config.getfloat('Itemized Deduction Information', 'Real Estate and Personal Property')
+other_tax_expenses = config.getfloat('Itemized Deduction Information', 'Other Tax Expenses')
+home_mortgage_interest = config.getfloat('Itemized Deduction Information', 'Home Mortgage Interest and Points')
+investment_interest = config.getfloat('Itemized Deduction Information', 'Investment Interest')
+gifts = config.getfloat('Itemized Deduction Information', 'Gifts')
+casualty_theft = config.getfloat('Itemized Deduction Information', 'Casualty and Theft Losses')
+other_itemized_deductions = config.getfloat('Itemized Deduction Information', 'Other Itemized Deductions')
+number_long_term_capital_gain_brackets = config.getint('Tax Brackets, Rates, Etc.', 'Number of LTCG Brackets')
+long_term_capital_gain_brackets = [[float(i)
+                                    for i in config.get('Tax Brackets, Rates, Etc.', 'LTCG Brackets and Rates').split()]
+                                   [j:j+3] for j in range(0, 3 * number_long_term_capital_gain_brackets, 3)]
+number_federal_brackets = config.getint('Tax Brackets, Rates, Etc.', 'Number of Federal Tax Brackets')
+federal_brackets = [[float(i)
+                     for i in config.get('Tax Brackets, Rates, Etc.', 'Federal Tax Brackets and Rates').split()]
+                    [j:j+3] for j in range(0, 3 * number_federal_brackets, 3)]
+number_state_brackets = [int(i)
+                         for i in config.get('Tax Brackets, Rates, Etc.', 'Number of State Tax Brackets').split()]
+state_brackets = [[[float(i) for i in config.get('Tax Brackets, Rates, Etc.', 'State Tax Brackets and Rates').split()]
+                   [j:j+3] for j in range(0, 3 * sum(number_state_brackets), 3)]
+                  [sum(number_state_brackets[0:k + 1]) - number_state_brackets[k]:sum(number_state_brackets[0:k + 1])]
+                  for k in range(0, number_of_states)]
+number_local_rates = [int(i) for i in config.get('Tax Brackets, Rates, Etc.', 'Number of Local Tax Rates').split()]
+local_rates = [[float(i) for i in config.get('Tax Brackets, Rates, Etc.', 'Local Tax Rates (%)').split()]
+               [sum(number_local_rates[0:j + 1]) - number_local_rates[j]:sum(number_local_rates[0:j + 1])]
+               for j in range(0, number_of_states)]
+case_path = "cases/" + str(tax_year) + "/"
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------------------- Read the federal wage input file ----------------------------------------- #
 # ------------------------------------- Read the federal withholding input file -------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-config.read(icase + 'fedwages.inp')
-wagefedl = [[float(i) for i in config.get('Federal Wage Information', 'Federal Wages').split()]
-            [j:j+3] for j in range(0, 3 * numpayps, 3)]
-ytdfdwag = sum(sum([wagefedl[i][1:] for i in range(0, numpayps)], []))
-if round(ytdfdwag, 2) != round(sum(wgsaltip), 2):
+config.read(case_path + 'fedwages.inp')
+federal_wage_list = config.get('Federal Wage Information', 'Federal Wages').split()
+total_federal_wages = sum(float(x) for x in federal_wage_list[1::3]) + sum(float(x) for x in federal_wage_list[2::3])
+if round(total_federal_wages, 2) != round(sum(wages_salary_tips), 2):
     print("Warning!!! Your 'Wages Salary Tips' input is NOT the same as your"
-          " YTD Federal Wages calculated from the fedwages.inp file")
-    print('From tp.inp file: ', round(sum(wgsaltip), 2))
-    print('From fedwages.inp: ', round(ytdfdwag, 2))
-config.read(icase + 'fedwithholding.inp')
-wthldfed = [[float(i) for i in config.get('Federal Withholding Information', 'Federal Withholding').split()]
-            [j:j+3] for j in range(0, 3 * numpayps, 3)]
-ytdfdwhl = sum(sum([wthldfed[i][1:] for i in range(0, numpayps)], []))
+          " Total Federal Wages calculated from the fedwages.inp file")
+    print('From tp.inp file: ', round(sum(wages_salary_tips), 2))
+    print('From fedwages.inp: ', round(total_federal_wages, 2))
+config.read(case_path + 'fedwithholding.inp')
+federal_withholding_list = config.get('Federal Withholding Information', 'Federal Withholding').split()
+total_federal_withholding = sum(float(x) for x in federal_withholding_list[1::3]) + \
+                            sum(float(x) for x in federal_withholding_list[2::3])
 # -------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------- Allocate space for the state wage array -------------------------------------- #
 # ---------------------------------- Allocate space for the state withholding array ---------------------------------- #
 # ----------------------------------------- Read the state wage input file(s) ---------------------------------------- #
 # ------------------------------------- Read the state withholding input file(s) ------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-wagestat = [[] for i in range(0, numstate)]
-wthldsta = [[] for i in range(0, numstate)]
-for i in range(0, numstate):
-    config.read(icase + istateab[i] + 'wages.inp')
-    wagestat[i] = [[float(j) for j in config.get('State Wage Information', 'State Wages').split()]
-                   [k:k+3] for k in range(0, 3 * numpayps, 3)]
-    config.read(icase + istateab[i] + 'withholding.inp')
-    wthldsta[i] = [[float(j) for j in config.get('State Withholding Information', 'State Withholding'). split()]
-                   [k:k+3] for k in range(0, 3 * numpayps, 3)]
+all_state_wages_list = [[] for i in range(0, number_of_states)]
+all_state_withholding_list = [[] for i in range(0, number_of_states)]
+for i in range(0, number_of_states):
+    config.read(case_path + state_abbreviations[i] + 'wages.inp')
+    all_state_wages_list[i] = config.get('State Wage Information', 'State Wages').split()
+    config.read(case_path + state_abbreviations[i] + 'withholding.inp')
+    all_state_withholding_list[i] = config.get('State Withholding Information', 'State Withholding'). split()
 # -------------------------------------------------------------------------------------------------------------------- #
 # ******************************************************************************************************************** #
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -119,383 +123,412 @@ for i in range(0, numstate):
 # -------------------------------------------- Net Capital Determination --------------------------------------------- #
 # --------------------------------------- Net Long Term Capital Determination ---------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-capnet = round(capgnls(sum(cpgainlt), sum(cpgainst), sum(cplosslt), sum(cplossst)), 2)
-capltnet = sum(cpgainlt) + sum(cplosslt)
+net_capital = round(capgnls(sum(long_term_capital_gains),
+                            sum(short_term_capital_gains),
+                            sum(long_term_capital_loss),
+                            sum(short_term_capital_loss)), 2)
+net_long_term_capital = sum(long_term_capital_gains) + sum(long_term_capital_loss)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------- Determine if State Refund is Taxable --------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-txblprtnofstref = txblstref(prestref, preitded, prefedsd)
+state_refund_taxable_portion = txblstref(prior_year_state_refund,
+                                         prior_year_itemized_deduction,
+                                         prior_year_federal_standard_deduction)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------- Federal AGI Calculation ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-fedrlagi = agifed(capnet, wgsaltip, taxabint, totordiv, txblprtnofstref, otherinc, hsadedct, otheradj)
+AGI_federal = agifed(net_capital,
+                     wages_salary_tips,
+                     taxable_interest,
+                     ordinary_dividends,
+                     state_refund_taxable_portion,
+                     other_income,
+                     hsa_deduction,
+                     other_adjustments)
 # -------------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------------- State AGI Calculation ----------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-ytdstwag = []
-for x in wagestat:
-    dude = 0
-    for y in x:
-        dude += sum(y[1:])
-    ytdstwag.append(round(dude, 2))
-stateagi = []
-nonresinc1 = []
-for i in range(0, numstate):
-    nonresinc = deepcopy(ytdstwag)
-    nonresinc.pop(i)
-    nonresinc1.append(deepcopy(sum(nonresinc)))
-    stagi = (fedrlagi
-             + stateadd[i]
-             - statesub[i]
-             - txblprtnofstref
-             - sum(nonresinc)
-             )
-    stateagi.append(round(stagi, 2))
+total_state_wages = []
+for state_wages in all_state_wages_list:
+    total_state_wages.append(round(sum(float(x) for x in state_wages[1::3]) +
+                                   sum(float(x) for x in state_wages[2::3]), 2))
+AGI_states = []
+non_resident_income_1 = []
+for i in range(0, number_of_states):
+    non_resident_income = deepcopy(total_state_wages)
+    non_resident_income.pop(i)
+    non_resident_income_1.append(deepcopy(sum(non_resident_income)))
+    state_agi = (AGI_federal
+                 + state_additions[i]
+                 - state_subtractions[i]
+                 - state_refund_taxable_portion
+                 - sum(non_resident_income)
+                 )
+    AGI_states.append(round(state_agi, 2))
 # -------------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------- Apportionment Factors Calculation ----------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-apprtnmt = []
-for i in range(0, numstate):
-    if numstate == 1:
-        apprtnmt.append(1.0)
+apportionment = []
+for i in range(0, number_of_states):
+    if number_of_states == 1:
+        apportionment.append(1.0)
     else:
-        apprtnmt.append(stateagi[i] / fedrlagi)
+        apportionment.append(AGI_states[i] / AGI_federal)
 # -------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------ Itemized Deduction Calculation ------------------------------------------ #
 # -------------------------- Apportionment factors applied to state itemized deductions here ------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-ytdstwhl = []
-for x in wthldsta:
-    dude = 0
-    for y in x:
-        dude += sum(y[1:])
-    ytdstwhl.append(round(dude, 2))
-feditmded = itemizer(expnsmed, expnsrel, expnstxo, expnsmor, expnsinv, expnsgif, expnscas, expnsoth, fedrlagi,
-                     sum(ytdstwhl))
-staitmded = []
-for i in range(0, numstate):
-    staitmded.append((feditmded - sum(ytdstwhl)) * apprtnmt[i])
+total_state_withholding = []
+for state_withholding in all_state_withholding_list:
+    total_state_withholding.append(round(sum(float(x) for x in state_withholding[1::3]) +
+                                         sum(float(x) for x in state_withholding[2::3]), 2))
+federal_itemized_deduction = itemizer(medical_and_dental,
+                                      real_estate_personal_property,
+                                      other_tax_expenses,
+                                      home_mortgage_interest,
+                                      investment_interest,
+                                      gifts,
+                                      casualty_theft,
+                                      other_itemized_deductions,
+                                      AGI_federal,
+                                      sum(total_state_withholding))
+state_itemized_deduction = []
+for i in range(0, number_of_states):
+    state_itemized_deduction.append((federal_itemized_deduction - sum(total_state_withholding)) * apportionment[i])
 # -------------------------------------------------------------------------------------------------------------------- #
 # ------------------ Apportionment factors applied to state standard deductions and exemptions here ------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
-for i in range(0, numstate):
-    stastndd[i] = stastndd[i] * apprtnmt[i]
-    staexmat[i] = staexmat[i] * apprtnmt[i]
+for i in range(0, number_of_states):
+    state_standard_deduction[i] = state_standard_deduction[i] * apportionment[i]
+    state_exemption[i] = state_exemption[i] * apportionment[i]
 # -------------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------- Federal Taxable Income Calculation ---------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-if ifeddedm.lower() == 'standard':
-    fedtaxinc = round(fedrlagi - fedstndd - fedexmat, 2)
-elif ifeddedm.lower() == 'itemized':
-    fedtaxinc = round(fedrlagi - feditmded - fedexmat, 2)
+if federal_deduction_method.lower() == 'standard':
+    taxable_income_federal = round(AGI_federal - federal_standard_deduction - federal_exemption, 2)
+elif federal_deduction_method.lower() == 'itemized':
+    taxable_income_federal = round(AGI_federal - federal_itemized_deduction - federal_exemption, 2)
 else:
-    fedtaxinc = None
+    taxable_income_federal = None
     print('STOP!!! Error in your "Federal Deduction Method" input')
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------------------- State Taxable Income Calculation ----------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-stataxinc = []
-istfiling = []
-for i in range(0, numstate):
-    if istdnfmd[i].lower() == 'stateagi':
-        if stateagi[i] < stdnflim[i]:
-            stataxinc.append(0.0)
-            istfiling.append(True)
+taxable_income_state = []
+do_not_file_logic = []
+for i in range(0, number_of_states):
+    if do_not_file_for_state[i].lower() == 'stateagi':
+        if AGI_states[i] < state_do_not_file_limit[i]:
+            taxable_income_state.append(0.0)
+            do_not_file_logic.append(True)
         else:
-            if istadedm[i].lower() == 'standard':
-                stataxinc.append(round(stateagi[i] - stastndd[i] - staexmat[i], 2))
-            elif istadedm[i].lower() == 'itemized':
-                stataxinc.append(round(stateagi[i] - staitmded[i] - staexmat[i], 2))
+            if state_deduction_method[i].lower() == 'standard':
+                taxable_income_state.append(round(AGI_states[i] - state_standard_deduction[i] - state_exemption[i], 2))
+            elif state_deduction_method[i].lower() == 'itemized':
+                taxable_income_state.append(round(AGI_states[i] - state_itemized_deduction[i] - state_exemption[i], 2))
             else:
                 print('STOP!!! Error in your "State Deduction Method" input')
-            istfiling.append(False)
+            do_not_file_logic.append(False)
     else:
         print('STOP!!! Error in your "Do Not File Method" input')
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------- Social Security and Medicare Taxable Income Calculation ------------------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
-socstaxinc = min((sum(wgsaltip) - sum(hsadedct)), oasdlimt)
-medctaxinc = sum(wgsaltip) - sum(hsadedct)
+taxable_income_social_security = min((sum(wages_salary_tips) - sum(hsa_deduction)), social_security_limit)
+taxable_income_medicare = sum(wages_salary_tips) - sum(hsa_deduction)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------- Federal Tax Calculation ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-fedmartaxrate = None
-for i in range(0, nfdtxbrk):
-    if fedtaxinc < brkfedtx[i][1]:
-        fedmartaxrate = deepcopy(brkfedtx[i][2])
+tax_rate_federal = None
+for i in range(0, number_federal_brackets):
+    if taxable_income_federal < federal_brackets[i][1]:
+        tax_rate_federal = deepcopy(federal_brackets[i][2])
         break
-qdcgrslt = qdcgtax(fedtaxinc, sum(qualdivd), capnet, capltnet, brkltcgr, brkfedtx, nfdtxbrk)
-fedinclessqdcgtax = qdcgrslt[0]
-qdltcgtax = qdcgrslt[1]
-fedtax = qdcgrslt[2] + totothtx
+qualified_dividends_capital_gains_results = qdcgtax(taxable_income_federal,
+                                                    sum(qualified_dividends),
+                                                    net_capital,
+                                                    net_long_term_capital,
+                                                    long_term_capital_gain_brackets,
+                                                    federal_brackets,
+                                                    number_federal_brackets)
+ordinary_income_tax = qualified_dividends_capital_gains_results[0]
+qualified_dividends_long_term_capital_gains_tax = qualified_dividends_capital_gains_results[1]
+total_tax_federal = qualified_dividends_capital_gains_results[2] + other_tax_total
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------------------------- State Tax Calculation ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-statetax = []
-stamartaxrate = []
-for i in range(0, numstate):
-    for j in range(0, nsttxbrk[i]):
-        if stataxinc[i] < brkstatx[i][j][1]:
-            stamartaxrate.append(deepcopy(brkstatx[i][j][2]))
+total_tax_states = []
+tax_rate_states = []
+for i in range(0, number_of_states):
+    for j in range(0, number_state_brackets[i]):
+        if taxable_income_state[i] < state_brackets[i][j][1]:
+            tax_rate_states.append(deepcopy(state_brackets[i][j][2]))
             break
-    if stataxinc[i] < 100000.0:
-        statetax.append(taxtablelookup(stataxinc[i], brkstatx[i], nsttxbrk[i]))
+    if taxable_income_state[i] < 100000.0:
+        total_tax_states.append(taxtablelookup(taxable_income_state[i], state_brackets[i], number_state_brackets[i]))
     else:
-        statetax.append(taxcalc(stataxinc[i], brkstatx[i], nsttxbrk[i]))
-    if nloctaxr[i] > 0:
-        for j in range(0, nloctaxr[i]):
-            statetax[i] = round(statetax[i] + (stataxinc[i] * (taxrlocl[i][j] / 100.0)), 2)
+        total_tax_states.append(taxcalc(taxable_income_state[i], state_brackets[i], number_state_brackets[i]))
+    if number_local_rates[i] > 0:
+        for j in range(0, number_local_rates[i]):
+            total_tax_states[i] = round(total_tax_states[i] +
+                                        (taxable_income_state[i] * (local_rates[i][j] / 100.0)), 2)
 # -------------------------------------------------------------------------------------------------------------------- #
 # ----------------------------------------- SS and Medicare Tax Calculation ------------------------------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
-socsectax = socstaxinc * txrtoasd
-medcartax = medctaxinc * txrtmedi
+total_tax_social_security = taxable_income_social_security * social_security_rate
+total_tax_medicare = taxable_income_medicare * medicare_rate
 # -------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------ Effective Tax Rate Calculation ------------------------------------------ #
 # -------------------------------------------------------------------------------------------------------------------- #
-totaxes = fedtax + sum(statetax) + socsectax + medcartax
-totincm = (sum(wgsaltip)
-           + sum(taxabint)
-           + sum(totordiv)
-           + capnet
-           + txblprtnofstref
-           + sum(otherinc))
-efftxrt = totaxes / totincm
+total_taxes = total_tax_federal + sum(total_tax_states) + total_tax_social_security + total_tax_medicare
+total_income = (sum(wages_salary_tips)
+                + sum(taxable_interest)
+                + sum(ordinary_dividends)
+                + net_capital
+                + state_refund_taxable_portion
+                + sum(other_income))
+effective_tax_rate = total_taxes / total_income
 # -------------------------------------------------------------------------------------------------------------------- #
 # -------------------------------------------- Federal Refund Calculation -------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-refunfed = refund(ytdfdwhl, fedtax)
+refund_federal = refund(total_federal_withholding, total_tax_federal)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------- State Refund Calculation --------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-refunsta = []
-for i in range(0, numstate):
-    refunsta.append(refund(ytdstwhl[i], statetax[i]))
+refund_states = []
+for i in range(0, number_of_states):
+    refund_states.append(refund(total_state_withholding[i], total_tax_states[i]))
 # -------------------------------------------------------------------------------------------------------------------- #
 # ---------------------------------------- Social Security Refund Calculation ---------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-refunssc = refund(sstxwhld, socsectax)
+refund_social_security = refund(social_security_withheld, total_tax_social_security)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------- Zero Out Federal Refund ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-wthldfednew = optrefund(wthldfed, refunfed, numpayps, ipayperd)
-ytdfdwhlnew = sum(sum([wthldfednew[i][1:] for i in range(0, numpayps)], []))
-optrefunfed = refund(ytdfdwhlnew, fedtax)
+new_federal_withholding_list = optrefund(federal_withholding_list, refund_federal, pay_periods, current_pay_period)
+new_total_federal_withholding = sum(float(x) for x in new_federal_withholding_list[1::3]) + \
+                                sum(float(x) for x in new_federal_withholding_list[2::3])
+optimized_federal_refund = refund(new_total_federal_withholding, total_tax_federal)
 # -------------------------------------------------------------------------------------------------------------------- #
 # --------------------------------------------- Zero Out State Refund(s) --------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-wthldstanew = [[] for i in range(0, numstate)]
-for i in range(0, numstate):
-    wthldstanew[i] = optrefund(wthldsta[i], refunsta[i], numpayps, ipayperd)
-ytdstwhlnew = []
-for x in wthldstanew:
-    dude = 0
-    for y in x:
-        dude += sum(y[1:])
-    ytdstwhlnew.append(round(dude, 2))
-optrefunsta = []
-for i in range(0, numstate):
-    optrefunsta.append(refund(ytdstwhlnew[i], statetax[i]))
+new_state_withholding_list = [[] for i in range(0, number_of_states)]
+for i in range(0, number_of_states):
+    new_state_withholding_list[i] = optrefund(all_state_withholding_list[i],
+                                              refund_states[i],
+                                              pay_periods,
+                                              current_pay_period)
+new_total_state_withholding = []
+for new_state_withholding in new_state_withholding_list:
+    new_total_state_withholding.append(round(sum(float(x) for x in new_state_withholding[1::3]) +
+                                             sum(float(x) for x in new_state_withholding[2::3]), 2))
+optimized_state_refund = []
+for i in range(0, number_of_states):
+    optimized_state_refund.append(refund(new_total_state_withholding[i], total_tax_states[i]))
 # -------------------------------------------------------------------------------------------------------------------- #
 # ------------------------------------------------- Formatted Print -------------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
-print('{:>12s}{:>4d}{:>3s}{:>19s}'.format('___Tax Year ', ntaxyear, '___', '|_____Federal_____|'), end='')
-print('{:>18s}{:>18s}'.format('__Soc. Security__|', '_____Medicare____|'), end='')
-for i in range(0, numstate):
-    print('{:>7s}{:>2s}{:>7s}'.format('_______', istateab[i].upper(), '_______'), end='|')
+print('{:>12s}{:>4d}{:>3s}{:>19s}'.format('___Tax_Year_', tax_year, '___', '|_____Federal_____|'), end='')
+print('{:>18s}{:>18s}'.format('__Soc._Security__|', '_____Medicare____|'), end='')
+for i in range(0, number_of_states):
+    print('{:>7s}{:>2s}{:>7s}'.format('_______', state_abbreviations[i].upper(), '_______'), end='|')
 print('')
 print('{:>20s}'.format('Net Cap. Gain/Loss |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', capnet, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', net_capital, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
+for i in range(0, number_of_states):
     print('{:>16s}'.format(' '), end='|')
 print('')
-if capnet < 0.0:
-    if abs(capnet) > 3000.00:
+if net_capital < 0.0:
+    if abs(net_capital) > 3000.00:
         print('{:>20s}'.format('  Usable Cap. Loss |'), end='')
         print('{:>3s}{:>11.2f}{:>4s}'.format('$', -3000.00, '|'), end='')
         print('{:>17s}'.format(' '), end='|')
         print('{:>17s}'.format(' '), end='|')
-        for i in range(0, numstate):
+        for i in range(0, number_of_states):
             print('{:>16s}'.format(' '), end='|')
         print('')
         print('{:>20s}'.format('Cap. Loss Carryover|'), end='')
-        print('{:>3s}{:>11.2f}{:>4s}'.format('$', -(abs(capnet) - 3000), '|'), end='')
+        print('{:>3s}{:>11.2f}{:>4s}'.format('$', -(abs(net_capital) - 3000), '|'), end='')
         print('{:>17s}'.format(' '), end='|')
         print('{:>17s}'.format(' '), end='|')
-        for i in range(0, numstate):
+        for i in range(0, number_of_states):
             print('{:>16s}'.format(' '), end='|')
         print('')
 print('{:>20s}'.format('Taxable St. Refund |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', txblprtnofstref, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', state_refund_taxable_portion, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
+for i in range(0, number_of_states):
     print('{:>16s}'.format(' '), end='|')
 print('')
 print('{:>20s}'.format('   State Wages    |'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', ytdstwag[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', total_state_wages[i], '|'), end='')
 print('')
 print('{:>20s}'.format('Non-resident Income|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', nonresinc1[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', non_resident_income_1[i], '|'), end='')
 print('')
 print('{:>20s}'.format('   AGI        |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedrlagi, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', AGI_federal, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', stateagi[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', AGI_states[i], '|'), end='')
 print('')
 print('{:>20s}'.format('   Apportionment   |'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>15.4f}{:>2s}'.format(apprtnmt[i], ' |'), end='')
+for i in range(0, number_of_states):
+    print('{:>15.4f}{:>2s}'.format(apportionment[i], ' |'), end='')
 print('')
 print('{:>20s}'.format(' Deduction Method  |'), end='')
-print('{:>13s}{:>4s}'.format(ifeddedm, ' '), end='|')
+print('{:>13s}{:>4s}'.format(federal_deduction_method, ' '), end='|')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>12s}{:>4s}'.format(istadedm[i], ' '), end='|')
+for i in range(0, number_of_states):
+    print('{:>12s}{:>4s}'.format(state_deduction_method[i], ' '), end='|')
 print('')
 print('{:>20s}'.format(' Stn. Ded. Amount  |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedstndd, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', federal_standard_deduction, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', stastndd[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', state_standard_deduction[i], '|'), end='')
 print('')
 print('{:>20s}'.format(' Itm. Ded. Amount  |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', feditmded, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', federal_itemized_deduction, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', staitmded[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', state_itemized_deduction[i], '|'), end='')
 print('')
 print('{:>20s}'.format(' Exemption Amount  |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedexmat, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', federal_exemption, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', staexmat[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', state_exemption[i], '|'), end='')
 print('')
 print('{:>20s}'.format('Do Not File?    |'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>10s}{:>6s}'.format(str(istfiling[i]), ' '), end='|')
+for i in range(0, number_of_states):
+    print('{:>10s}{:>6s}'.format(str(do_not_file_logic[i]), ' '), end='|')
 print('')
 print('{:>20s}'.format('Tot. Taxable Income|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedtaxinc, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', socstaxinc, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', medctaxinc, '|'), end='')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', stataxinc[i], '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', taxable_income_federal, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', taxable_income_social_security, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', taxable_income_medicare, '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', taxable_income_state[i], '|'), end='')
 print('')
 print('{:>20s}'.format(' Marginal Tax Rate |'), end='')
-print('{:>14.2f}{:>4s}'.format(fedmartaxrate, '% |'), end='')
-print('{:>14.2f}{:>4s}'.format(txrtoasd*100, '% |'), end='')
-print('{:>14.2f}{:>4s}'.format(txrtmedi*100, '% |'), end='')
-for i in range(0, numstate):
-    print('{:>13.2f}{:>4s}'.format(stamartaxrate[i], '% |'), end='')
+print('{:>14.2f}{:>4s}'.format(tax_rate_federal, '% |'), end='')
+print('{:>14.2f}{:>4s}'.format(social_security_rate * 100, '% |'), end='')
+print('{:>14.2f}{:>4s}'.format(medicare_rate * 100, '% |'), end='')
+for i in range(0, number_of_states):
+    print('{:>13.2f}{:>4s}'.format(tax_rate_states[i], '% |'), end='')
 print('')
 print('{:>20s}'.format(' Ordinary Inc. Tax |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedinclessqdcgtax, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', ordinary_income_tax, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
+for i in range(0, number_of_states):
     print('{:>16s}'.format(' '), end='|')
 print('')
 print('{:>20s}'.format('   QD & LTCG Tax   |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', qdltcgtax, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', qualified_dividends_long_term_capital_gains_tax, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
+for i in range(0, number_of_states):
     print('{:>16s}'.format(' '), end='|')
 print('')
 print('{:>20s}'.format('  Tot. Income Tax  |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', fedtax, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', socsectax, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', medcartax, '|'), end='')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', statetax[i], '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', total_tax_federal, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', total_tax_social_security, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', total_tax_medicare, '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', total_tax_states[i], '|'), end='')
 print('')
 print('{:>20s}'.format('   Taxes Withheld  |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', ytdfdwhl, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', sstxwhld, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', total_federal_withholding, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', social_security_withheld, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', ytdstwhl[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', total_state_withholding[i], '|'), end='')
 print('')
 print('{:>20s}'.format('      Refunds      |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', refunfed, '|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', refunssc, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', refund_federal, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', refund_social_security, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', refunsta[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', refund_states[i], '|'), end='')
 print('')
 print('{:>20s}'.format('Effective Tax Rate |'), end='')
-print('{:>14.2f}{:>4s}'.format(efftxrt * 100.0, '% |'), end='')
+print('{:>14.2f}{:>4s}'.format(effective_tax_rate * 100.0, '% |'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
+for i in range(0, number_of_states):
     print('{:>16s}'.format(' '), end='|')
 print('')
 print('{:>20s}'.format('Wthhlding Adjustmnt|'), end='')
-if ipayperd < numpayps:
-    print('{:>3s}{:>11.2f}{:>4s}'.format('$', -1.0 * (refunfed / (numpayps - ipayperd)), '|'), end='')
+if current_pay_period < pay_periods:
+    print('{:>3s}{:>11.2f}{:>4s}'.format('$', -1.0 * (refund_federal / (pay_periods - current_pay_period)), '|'),
+          end='')
 else:
     print('{:>3s}{:>11.2f}{:>4s}'.format('$', 0.0, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    if ipayperd < numpayps:
-        print('{:>2s}{:>11.2f}{:>4s}'.format('$', -1.0 * (refunsta[i] / (numpayps - ipayperd)), '|'), end='')
+for i in range(0, number_of_states):
+    if current_pay_period < pay_periods:
+        print('{:>2s}{:>11.2f}{:>4s}'.format('$', -1.0 * (refund_states[i] / (pay_periods - current_pay_period)), '|'),
+              end='')
     else:
         print('{:>2s}{:>11.2f}{:>4s}'.format('$', 0.0, '|'), end='')
 print('')
 print('{:>20s}'.format('Optimized Wthhlding|'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', ytdfdwhlnew, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', new_total_federal_withholding, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', ytdstwhlnew[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', new_total_state_withholding[i], '|'), end='')
 print('')
 print('{:>20s}'.format(' Optimized Refunds |'), end='')
-print('{:>3s}{:>11.2f}{:>4s}'.format('$', optrefunfed, '|'), end='')
+print('{:>3s}{:>11.2f}{:>4s}'.format('$', optimized_federal_refund, '|'), end='')
 print('{:>17s}'.format(' '), end='|')
 print('{:>17s}'.format(' '), end='|')
-for i in range(0, numstate):
-    print('{:>2s}{:>11.2f}{:>4s}'.format('$', optrefunsta[i], '|'), end='')
+for i in range(0, number_of_states):
+    print('{:>2s}{:>11.2f}{:>4s}'.format('$', optimized_state_refund[i], '|'), end='')
 print('')
 print('')
-if ipayperd >= numpayps:
-    print('{:>43s}'.format('Federal and State Withholdings for the year'))
+if current_pay_period >= pay_periods:
+    print('{:>43s}'.format('Federal and State Withholding for the year'))
 else:
-    print('{:>40s}'.format('Optimized Federal and State Withholdings'))
+    print('{:>40s}'.format('Optimized Federal and State Withholding'))
 print('{:>23s}{:>15s}{:>7}{:>12s}'.format('||', '________Federal', '_____||', '____________'), end='')
-for i in range(0, numstate):
-    if i < numstate - 1:
-        print('{:>2s}{:>10}{:>12}'.format(istateab[i].upper(), '________||', '____________'), end='')
-    if i >= numstate - 1:
-        print('{:>2s}{:>10}'.format(istateab[i].upper(), '________||'), end='')
+for i in range(0, number_of_states):
+    if i < number_of_states - 1:
+        print('{:>2s}{:>10}{:>12}'.format(state_abbreviations[i].upper(), '________||', '____________'), end='')
+    if i >= number_of_states - 1:
+        print('{:>2s}{:>10}'.format(state_abbreviations[i].upper(), '________||'), end='')
         print('')
-for i in range(0, numpayps):
-    print('{:<4s}{:>02d}{:>17s}{:>9.2f}{:>9.2f}'.format('PP#', i+1, 'Withholding:  ||',
-          wthldfednew[i][1], wthldfednew[i][2]), end='  ||')
-    for j in range(0, numstate):
-        print('{:>10.2f}{:>10.2f}'.format(wthldstanew[j][i][1], wthldstanew[j][i][2]), end='  ||')
-        if j == numstate - 1:
+for i in range(0, pay_periods):
+    print('{:<4s}{:>02d}{:>17s}{:>9.2f}{:>9.2f}'.format('PP#', i + 1, 'Withholding:  ||',
+                                                        float(new_federal_withholding_list[i * 3 + 1]),
+                                                        float(new_federal_withholding_list[i * 3 + 2])), end='  ||')
+    for j in range(0, number_of_states):
+        print('{:>10.2f}{:>10.2f}'.format(float(new_state_withholding_list[j][i * 3 + 1]),
+                                          float(new_state_withholding_list[j][i * 3 + 2])), end='  ||')
+        if j == number_of_states - 1:
             print('')
