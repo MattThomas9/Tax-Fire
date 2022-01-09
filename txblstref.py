@@ -6,10 +6,10 @@
 # -------------------------------------------------------------------------------------------------------------------- #
 
 
-def txblstref(prevrefund, prevtotalitemized, prevstnded):
-    if prevstnded < prevtotalitemized:
-        b = prevtotalitemized - prevstnded
-        return min(prevrefund, b)
+def txblstref(prior_year_refund, prior_year_itemized_deduction, prior_year_federal_standard_deduction):
+    if prior_year_federal_standard_deduction < prior_year_itemized_deduction:
+        b = prior_year_itemized_deduction - prior_year_federal_standard_deduction
+        return min(prior_year_refund, b)
     else:
         b = 0.0
-        return min(prevrefund, b)
+        return min(prior_year_refund, b)

@@ -5,6 +5,6 @@
 # -------------------------------------------------------------------------------------------------------------------- #
 
 
-def refund(ytdwthld, tax):
-    refun = ytdwthld - tax
-    return refun
+def refund(total_withholding, tax):
+    total_refund = total_withholding - tax
+    return total_refund

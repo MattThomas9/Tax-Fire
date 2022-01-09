@@ -5,39 +5,40 @@
 # -------------------------------------------------------------------------------------------------------------------- #
 
 
-def agifed(netcapital, wagsaltip, taxblint, totordnrydiv, taxblstateref, otherincome, hsadeduction, otheradjmt):
-    if netcapital > 0.0:
-        fedagi = (sum(wagsaltip)
-                  + sum(taxblint)
-                  + sum(totordnrydiv)
-                  + netcapital
-                  + taxblstateref
-                  + sum(otherincome)
-                  - sum(hsadeduction)
-                  - sum(otheradjmt)
-                  )
+def agifed(net_capital, wages_salary_tips, taxable_interest, ordinary_dividends, state_refund_taxable_portion,
+           other_income, hsa_deduction, other_adjustments):
+    if net_capital > 0.0:
+        federal_agi = (sum(wages_salary_tips)
+                       + sum(taxable_interest)
+                       + sum(ordinary_dividends)
+                       + net_capital
+                       + state_refund_taxable_portion
+                       + sum(other_income)
+                       - sum(hsa_deduction)
+                       - sum(other_adjustments)
+                       )
     # the following code is here for a placeholder right now
     # if (net_long_term_capital > 0.0) and (net_capital > 0.0)
     # 28% Rate Gain Calculation will go here
-    # Unrecaptured Section 1250 Gain Calculation will go here
-    elif netcapital < 0.0:
-        fedagi = (sum(wagsaltip)
-                  + sum(taxblint)
-                  + sum(totordnrydiv)
-                  + -min(abs(netcapital), 3000.00)
-                  + taxblstateref
-                  + sum(otherincome)
-                  - sum(hsadeduction)
-                  - sum(otheradjmt)
-                  )
+    # Un-recaptured Section 1250 Gain Calculation will go here
+    elif net_capital < 0.0:
+        federal_agi = (sum(wages_salary_tips)
+                       + sum(taxable_interest)
+                       + sum(ordinary_dividends)
+                       + -min(abs(net_capital), 3000.00)
+                       + state_refund_taxable_portion
+                       + sum(other_income)
+                       - sum(hsa_deduction)
+                       - sum(other_adjustments)
+                       )
     else:
-        fedagi = (sum(wagsaltip)
-                  + sum(taxblint)
-                  + sum(totordnrydiv)
-                  + netcapital
-                  + taxblstateref
-                  + sum(otherincome)
-                  - sum(hsadeduction)
-                  - sum(otheradjmt)
-                  )
-    return fedagi
+        federal_agi = (sum(wages_salary_tips)
+                       + sum(taxable_interest)
+                       + sum(ordinary_dividends)
+                       + net_capital
+                       + state_refund_taxable_portion
+                       + sum(other_income)
+                       - sum(hsa_deduction)
+                       - sum(other_adjustments)
+                       )
+    return federal_agi

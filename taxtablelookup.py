@@ -6,13 +6,13 @@
 from taxcalc import taxcalc
 
 
-def taxtablelookup(taxblinc, taxbrk, ntaxbrk):
-    if (taxblinc % 100) >= 50:
-        lowerbound = taxblinc - (taxblinc % 100) + 50
+def taxtablelookup(taxable_income, tax_brackets, number_tax_brackets):
+    if (taxable_income % 100) >= 50:
+        lower_bound = taxable_income - (taxable_income % 100) + 50
     else:
-        lowerbound = taxblinc - (taxblinc % 100)
-    upperbound = lowerbound + 50
-    lowerboundtax = taxcalc(lowerbound, taxbrk, ntaxbrk)
-    upperboundtax = taxcalc(upperbound, taxbrk, ntaxbrk)
-    tabletax = round((lowerboundtax + upperboundtax) / 2, 0)
-    return tabletax
+        lower_bound = taxable_income - (taxable_income % 100)
+    upperbound = lower_bound + 50
+    lower_bound_tax = taxcalc(lower_bound, tax_brackets, number_tax_brackets)
+    upper_bound_tax = taxcalc(upperbound, tax_brackets, number_tax_brackets)
+    table_tax = round((lower_bound_tax + upper_bound_tax) / 2, 0)
+    return table_tax

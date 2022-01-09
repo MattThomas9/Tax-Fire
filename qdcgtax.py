@@ -2,57 +2,53 @@
 # ============================================== Developer: Matt Thomas ============================================== #
 # ============================================ Build Date: Jan. 27, 2019 ============================================= #
 # ==================================================================================================================== #
-# ----------- Built based on Qualified Dividends and Capital Gain Tax Worksheet—Line 11a in IRS From 1040 ----------- #
+# ----------- Built based on Qualified Dividends and Capital Gain Tax Worksheet—Line 16 in IRS From 1040 ------------- #
+# -------------------------------------Version: Tax Year 2021 1040 Instructions--------------------------------------- #
 # -------------------------------------------------------------------------------------------------------------------- #
 from taxtablelookup import taxtablelookup
 from taxcalc import taxcalc
 
 
-def qdcgtax(tottaxinc, qualdiv, cpnet, cpltnet, brkltcg, brkfedtax, nbrkfedtax):
-    a1 = tottaxinc
-    a2 = qualdiv
-    if (cpltnet <= 0.0) or (cpnet <= 0.0):
-        a3 = 0.0
+def qdcgtax(total_taxable_income, qualified_dividends, net_capital, net_long_term_capital,
+            long_term_capital_gain_brackets, federal_brackets, number_federal_brackets):
+    line_1 = total_taxable_income
+    line_2 = qualified_dividends
+    if (net_long_term_capital <= 0.0) or (net_capital <= 0.0):
+        line_3 = 0.0
     else:
-        a3 = min(cpltnet, cpnet)
-    a4 = a2 + a3
-    a5 = 0  # this value has something to do with Form 4952, leaving as placeholder
-    if (a4 - a5) <= 0.0:
-        a6 = 0.0
+        line_3 = min(net_long_term_capital, net_capital)
+    line_4 = line_2 + line_3
+    if (line_1 - line_4) <= 0.0:
+        line_5 = 0.0
     else:
-        a6 = a4 - a5
-    if (a1 - a6) <= 0.0:
-        a7 = 0.0
+        line_5 = line_1 - line_4
+    line_6 = long_term_capital_gain_brackets[0][1]
+    line_7 = min(line_1, line_6)
+    line_8 = min(line_5, line_7)
+    line_9 = line_7 - line_8
+    line_10 = min(line_1, line_4)
+    line_11 = line_9
+    line_12 = line_10 - line_11
+    line_13 = long_term_capital_gain_brackets[1][1]
+    line_14 = min(line_1, line_13)
+    line_15 = line_5 + line_9
+    if (line_14 - line_15) <= 0.0:
+        line_16 = 0.0
     else:
-        a7 = a1 - a6
-    a8 = brkltcg[0][1]
-    a9 = min(a1, a8)
-    a10 = min(a7, a9)
-    a11 = a9 - a10
-    a12 = min(a1, a6)
-    a13 = a11
-    a14 = a12 - a13
-    a15 = brkltcg[1][1]
-    a16 = min(a1, a15)
-    a17 = a7 + a11
-    if (a16 - a17) <= 0.0:
-        a18 = 0.0
+        line_16 = line_14 - line_15
+    line_17 = min(line_12, line_16)
+    line_18 = line_17 * (long_term_capital_gain_brackets[1][2] / 100.0)
+    line_19 = line_9 + line_17
+    line_20 = line_10 - line_19
+    line_21 = line_20 * (long_term_capital_gain_brackets[2][2] / 100.0)
+    if line_5 < 100000.0:
+        line_22 = taxtablelookup(line_5, federal_brackets, number_federal_brackets)
     else:
-        a18 = a16 - a17
-    a19 = min(a14, a18)
-    a20 = a19 * (brkltcg[1][2] / 100)
-    a21 = a11 + a19
-    a22 = a12 - a21
-    a23 = a22 * (brkltcg[2][2] / 100)
-    if a7 < 100000.00:
-        a24 = taxtablelookup(a7, brkfedtax, nbrkfedtax)
+        line_22 = taxcalc(line_5, federal_brackets, number_federal_brackets)
+    line_23 = line_18 + line_21 + line_22
+    if line_1 < 100000.0:
+        line_24 = taxtablelookup(line_1, federal_brackets, number_federal_brackets)
     else:
-        a24 = taxcalc(a7, brkfedtax, nbrkfedtax)
-    a25 = a20 + a23 + a24
-    if a1 < 100000.00:
-        a26 = taxtablelookup(a1, brkfedtax, nbrkfedtax)
-    else:
-        a26 = taxcalc(a1, brkfedtax, nbrkfedtax)
-    a27 = min(a25, a26)
-    areslt = [a24, a20 + a23, a27]
-    return areslt
+        line_24 = taxcalc(line_1, federal_brackets, number_federal_brackets)
+    line_25 = min(line_23, line_24)
+    return [line_22, line_18 + line_21, line_25]

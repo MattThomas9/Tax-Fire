@@ -6,10 +6,10 @@
 from copy import deepcopy
 
 
-def optrefund(wthld, refun, numpp, ipp):
-    wthldnew = deepcopy(wthld)
-    if ipp < numpp:
-        wthldadj = refun / (numpp - ipp)
-        for i in range(ipp, numpp):
-            wthldnew[i*3+1] = round(float(wthld[i*3+1]) - wthldadj, 2)
-    return wthldnew
+def optrefund(withholding, refund, number_pay_periods, current_pay_period):
+    withholding_new = deepcopy(withholding)
+    if current_pay_period < number_pay_periods:
+        withholding_adjustment = refund / (number_pay_periods - current_pay_period)
+        for i in range(current_pay_period, number_pay_periods):
+            withholding_new[i*3+1] = round(float(withholding[i * 3 + 1]) - withholding_adjustment, 2)
+    return withholding_new

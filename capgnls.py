@@ -5,8 +5,8 @@
 # -------------------------------------------------------------------------------------------------------------------- #
 
 
-def capgnls(cpltgain, cpstgain, cpltloss, cpstloss):
-    cpstnet = cpstgain + cpstloss
-    cpltnet = cpltgain + cpltloss
-    cpnet = cpstnet + cpltnet
-    return cpnet
+def capgnls(long_term_capital_gains, short_term_capital_gains, long_term_capital_loss, short_term_capital_loss):
+    short_term_capital_net = short_term_capital_gains + short_term_capital_loss
+    long_term_capital_net = long_term_capital_gains + long_term_capital_loss
+    capital_net = short_term_capital_net + long_term_capital_net
+    return capital_net
